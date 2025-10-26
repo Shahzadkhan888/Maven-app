@@ -1,0 +1,3 @@
+@echo off
+echo Checking NPM version...
+npm --version
