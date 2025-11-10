@@ -1,37 +1,37 @@
 pipeline {
     agent any
-    tools {
-        maven 'Maven'
-    }
-
     stages {
-
-        stage("Build JAR") {
-            steps {
-                script {
-                    echo "Building the application..."
-                    bat "mvn clean package"
-                }
-            }
-        }
-
-        stage("Build Docker Image") {
-            steps {
-                script {
-                    echo "Building the Docker image..."
-                    withCredentials([usernamePassword(credentialsId: 'my-docker-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        bat "docker build -t shahzadk1/my-repo:1.2 ."
-                        bat "echo %PASS% | docker login -u %USER% --password-stdin"
-                        bat "docker push shahzadk1/my-repo:1.2"
+        stage("test ") {
+                    steps {
+                        script {
+                            echo "testing the application"
+                            echo "Executing the pipeline for %BRANCH_NAME%"
+                        }
                     }
                 }
+        stage("build ") {
+            when {
+            expression  {
+              BRANCH_NAME == 'master'
+            }
+            }
+            steps {
+                script {
+                    echo "building the application"
+                }
             }
         }
 
-        stage("Deploy") {
+        stage("deploy") {
+         when {
+                    expression  {
+                      BRANCH_NAME == 'master'
+                    }
+                    }
             steps {
                 script {
-                    echo "Deploying the Application..."
+                    echo "deploying the application"
+
                 }
             }
         }
